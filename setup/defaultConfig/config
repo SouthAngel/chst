@@ -1,0 +1,12 @@
+return{
+houdini_="20.5.410",
+houdini={
+htoa="6.3.6.0",
+},
+maya_="2024",
+maya={
+mtoa="5.4.7"
+},
+nuke_="13.2v3",
+nuke={},
+}

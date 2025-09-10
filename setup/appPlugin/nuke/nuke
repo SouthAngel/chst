@@ -1,0 +1,9 @@
+local os = require"os"
+local io = require"io"
+-- local iinfo = dofile"init"
+local hroot=[[V:\pipeline\plugins\houdini\htoa]]
+local appVersion="19.5.805"
+local pluginVersion="6.2.5.3"
+
+local hdocRoot=os.getenv("USERPROFILE").."\\"..appVersion
+print(hdocRoot)

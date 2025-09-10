@@ -1,0 +1,5 @@
+return{
+aa="bb",
+cc="dd",
+function bb() print("bf") end,
+}

@@ -1,0 +1,63 @@
+package.path=package.path..";.\\?"
+local os=require"os"
+local io=require"io"
+local copen=cc.readFileLines"copen"
+if(not cc.isfile(copen[3].."/config/config"))then
+    print("mkdir "..copen[3])
+    io.popen("mkdir \""..copen[3].."\""):close()
+    cc.copydir(cc.root.."/setup/defaultConfig",copen[3].."/config")
+end
+cc.copyfile(copen[3].."/config/config","projectconfig")
+cc.copyfile(copen[3].."/config/setup","projectsetup")
+pfg=require"projectconfig"
+require"projectsetup"
+cc.printg(copen)
+dofile(string.format("%s/setup/appPlugin/%s/%s",cc.root,copen[2],copen[2]))
+for k,_ in pairs(pfg[copen[2]]) do
+    dofile(string.format("%s/setup/appPlugin/%s/%s.lua",cc.root,copen[2],k))
+end
+
+local function findAppCmd(_a,_v,_f)
+    local ret=""
+    local amap={
+        houdini=function()
+            local tpaths = {
+                [[C:\Program Files\Side Effects Software]],
+                [[C:\ProgramData\PHoudini_etemp]],
+            }
+            for _,tpath in ipairs(tpaths) do
+                local tpathb = tpath.."\\Houdini ".._v.."\\bin\\houdinifx.exe"
+                if(cc.isfile(tpathb))then
+                    ret=string.format("\"%s\"",tpathb)
+                    if(_f)then ret=ret.." \"".._f.."\"" end
+                    break
+                end
+            end
+        end,
+        maya=function()
+            local tpath=string.format("C:\\Program Files\\Autodesk\\Maya%s\\bin\\maya.exe",_v)
+            if(cc.isfile(tpath))then ret="\""..tpath.."\"" if(_f)then ret=ret.." -file \"".._f.."\"" end end
+        end,
+        nuke=function()
+            local tpath=string.format("C:\\Program Files\\Nuke%s\\Nuke%s.exe",_v,string.match(_v,"%d%d%.%d"))
+            if(cc.isfile(tpath))then ret="\""..tpath.."\" --nukex" if(_f)then ret=ret.." \"".._f.."\"" end end
+        end,
+    }
+    amap[_a]()
+    return ret
+end
+
+-- set env
+(function()
+    local hh = io.open("startapp.bat","w")
+    hh:write("@ECHO OFF\n")
+    for k,v in pairs(cc.readFileKV"env") do
+        hh:write(string.format("set \"%s=%s\"\n",k,v))
+    end
+    local hpath = findAppCmd(copen[2],pfg[copen[2].."_"],copen[8])
+    if(hpath=="")then cc.appendFile("error","Not found "..copen[2].." app\n") end
+    hh:write(string.format("start \"%s\" %s",copen[2],hpath))
+    hh:write("\n")
+    hh:close()
+    cc.startappBa()
+end)()

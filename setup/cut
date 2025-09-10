@@ -1,0 +1,77 @@
+local io=require"io"
+
+function cc.printg(_g)
+    for k,v in pairs(_g) do
+        print(k)
+        print(v)
+    end
+end
+
+
+function cc.appendFile(_f,_m)
+    io.open(_f,"a"):write(_m):close()
+end
+
+function cc.setFileKV(_f,_t)
+    local hh=io.open(_f,"w")
+    if (hh~=nil) then
+        for k,v in pairs(_t) do
+            hh:write(k.."\n")
+            hh:write(v.."\n")
+        end
+        hh:close()
+    end
+end
+
+function cc.readFileKV(_f)
+    local ret = {}
+    local hh=io.open(_f)
+    if (hh~=nil) then
+        local kl = false
+        local pkl = ""
+        while (1) do
+            local rl = hh:read()
+            if(rl==nil)then break end
+            kl = not kl
+            if(kl)then
+                pkl = rl
+            else
+                ret[pkl] = rl
+            end
+        end
+        hh:close()
+    end
+    return ret
+end
+
+function cc.readFileLines(_f)
+    local ret = {}
+    local hh=io.open(_f)
+    if (hh~=nil) then
+        while (1) do
+            local rl = hh:read()
+            if(rl==nil)then break end
+            ret[#ret+1]=rl
+        end
+        hh:close()
+    end
+    return ret
+end
+
+function cc.writeFileLines(_f,_t)
+    local hh=io.open(_f,"w")
+    if (hh~=nil) then
+        for _,v in ipairs(_t) do
+            hh:write(v.."\n")
+        end
+        hh:close()
+    end
+end
+
+function cc.appendKeyPath(_t,_k,_v,_d)
+    local tmp=_t[_k] or _d
+    if(string.find(tmp,_v)==nil)then
+        tmp=tmp..";".._v
+        _t[_k]=tmp
+    end
+end

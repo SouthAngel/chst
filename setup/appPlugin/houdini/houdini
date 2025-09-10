@@ -1,0 +1,3 @@
+local envm=cc.readFileKV"env"
+cc.appendKeyPath(envm,"HOUDINI_PACKAGE_DIR","V:/pipeline/houdini_env/LTHT","&")
+cc.setFileKV("env",envm)
