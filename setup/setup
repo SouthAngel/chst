@@ -1,4 +1,3 @@
-package.path=package.path..";.\\?"
 local os=require"os"
 local io=require"io"
 local copen=cc.readFileLines"copen"

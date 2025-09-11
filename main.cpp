@@ -97,6 +97,19 @@ int main(int, char**){
     auto L = luaL_newstate();
     int retL=-1;
     luaL_openlibs(L);
+    auto top=lua_gettop(L);
+    { // setup package.path
+        lua_getglobal(L,"package");
+        lua_getfield(L,-1,"path");
+        std::string tp=lua_tostring(L,-1);
+        lua_pop(L,1);
+        tp.append(";./?;./?.lua");
+        lua_pushstring(L,"path");
+        lua_pushstring(L,tp.c_str());
+        lua_settable(L,-3);
+        top = lua_gettop(L);
+        lua_pop(L,1);
+    }
     lua_newtable(L);
     for (const luaL_Reg &ap : cc)
     {

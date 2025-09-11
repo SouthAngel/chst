@@ -1,3 +1,9 @@
+local os=require"os"
+local npd="V:/pipeline/plugins/houdini/axiom/axiom3.3.070"
+local lpd=os.getenv("USERPROFILE").."\\Documents\\chst\\"..cc.hashcs(npd)
+cc.copydir(npd,lpd)
 local envm=cc.readFileKV"env"
-cc.appendKeyPath(envm,"HOUDINI_PACKAGE_DIR","V:/pipeline/houdini_env/LTHT","&")
-cc.setFileKV("env",envm)
+cc.appendKeyPath(envm,"HOUDINI_PACKAGE_DIR","V:/pipeline/houdini_env/LTHT;V:/pipeline/plugins/houdini/deadline/Houdini","&")
+cc.appendKeyPath(envm,"HOUDINI_PACKAGE_DIR",string.gsub(lpd,"\\","/"),"&")
+envm["HOUDINI_DISABLE_OPENFX_DEFAULT_PATH"]="1"
+cc.writeFileKV("env",envm)

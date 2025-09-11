@@ -12,7 +12,7 @@ local pluginLRoot=docRoot.."\\chst\\"..pluginHID
 
 local envm = cc.readFileKV"env"
 cc.appendKeyPath(envm,"HOUDINI_PACKAGE_DIR",string.gsub(pluginLRoot,"\\","/"),"&")
-cc.setFileKV("env",envm)
+cc.writeFileKV("env",envm)
 cc.copydir(pluginRoot,pluginLRoot)
 -- cc.appendFile("envstack","HOUDINI_PACKAGE_PATH\n"..pluginLRoot.."\n")
 cc.appendFile("message","htoa end\n")

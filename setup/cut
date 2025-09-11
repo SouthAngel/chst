@@ -12,7 +12,7 @@ function cc.appendFile(_f,_m)
     io.open(_f,"a"):write(_m):close()
 end
 
-function cc.setFileKV(_f,_t)
+function cc.writeFileKV(_f,_t)
     local hh=io.open(_f,"w")
     if (hh~=nil) then
         for k,v in pairs(_t) do
@@ -42,6 +42,12 @@ function cc.readFileKV(_f)
         hh:close()
     end
     return ret
+end
+
+function cc.setupFileKV(_f,_c)
+    local tt=cc.readFileKV(_f)
+    _c(tt)
+    cc.writeFileKV(_f,tt)
 end
 
 function cc.readFileLines(_f)
